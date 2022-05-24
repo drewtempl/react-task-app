@@ -1,25 +1,64 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import Overview from "./components/Overview";
+import uniqid from "uniqid";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: {
+        text: "",
+        id: uniqid(),
+      },
+      tasks: [],
+    };
+
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(event) {
+    this.setState({
+      value: {
+        text: event.target.value,
+        id: this.state.value.id,
+      },
+    });
+  }
+
+  handleSubmit(event) {
+    this.setState((state, props) => {
+      return {
+        tasks: state.tasks.concat(state.value),
+        value: {
+          text: "",
+          id: uniqid(),
+        },
+      };
+    });
+
+    event.preventDefault();
+  }
+
+  render() {
+    return (
+      <div>
+        <form onSubmit={this.handleSubmit}>
+          <label>
+            Task:
+            <input
+              type="text"
+              value={this.state.value.text}
+              onChange={this.handleChange}
+              name="taskInput"
+            ></input>
+          </label>
+          <input type="submit" value="Submit"></input>
+        </form>
+        <Overview tasks={this.state.tasks}></Overview>
+      </div>
+    );
+  }
 }
 
 export default App;

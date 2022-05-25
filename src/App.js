@@ -47,7 +47,10 @@ class App extends Component {
     const task = this.state.tasks.find(element => {
       return element.id === taskID;
     })
-    console.log(task);
+    const index = this.state.tasks.indexOf(task);
+    this.setState({
+      tasks: this.state.tasks.slice(0, index).concat(this.state.tasks.slice(index + 1))
+    })
   }
 
   render() {

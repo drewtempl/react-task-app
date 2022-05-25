@@ -1,77 +1,42 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import Overview from "./components/Overview";
 import uniqid from "uniqid";
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: {
-        text: "",
-        id: uniqid(),
-      },
-      tasks: [],
-    };
+function App() {
+  const [value, setValue] = useState({ text: "", id: uniqid() });
+  const [tasks, setTasks] = useState([]);
 
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.removeTask = this.removeTask.bind(this);
-
-  }
-
-  handleChange(event) {
-    this.setState({
-      value: {
-        text: event.target.value,
-        id: this.state.value.id,
-      },
-    });
-  }
-
-  handleSubmit(event) {
-    this.setState((state, props) => {
-      return {
-        tasks: state.tasks.concat(state.value),
-        value: {
-          text: "",
-          id: uniqid(),
-        },
-      };
-    });
-
-    event.preventDefault();
-  }
-
-  removeTask(taskID) {
-    //console.log(taskID)
-    const task = this.state.tasks.find(element => {
+  function removeTask(taskID) {    
+    const task = tasks.find(element => {
       return element.id === taskID;
     })
-    const index = this.state.tasks.indexOf(task);
-    this.setState({
-      tasks: this.state.tasks.slice(0, index).concat(this.state.tasks.slice(index + 1))
-    })
+    const index = tasks.indexOf(task);
+    setTasks(tasks.slice(0, index).concat(tasks.slice(index + 1)))
   }
 
-  render() {
-    return (
-      <div>
-        <form onSubmit={this.handleSubmit}>
-          <label>
-            Task:
-            <input
-              type="text"
-              value={this.state.value.text}
-              onChange={this.handleChange}
-              name="taskInput"
-            ></input>
-          </label>
-          <input type="submit" value="Submit"></input>
-        </form>
-        <Overview tasks={this.state.tasks} removeTask={this.removeTask}></Overview>
-      </div>
-    );
-  }
+  return (
+    <div>
+      <form
+        onSubmit={e => {
+          setTasks(tasks.concat(value));
+          setValue({ text: "", id: uniqid() });
+          e.preventDefault();
+        }}
+      >
+        <label>
+          Task:
+          <input
+            type="text"
+            value={value.text}
+            onChange={e => setValue({ text: e.target.value, id: value.id })}
+            name="taskInput"
+          ></input>
+        </label>
+        <input type="submit" value="Submit"></input>
+      </form>
+      <Overview tasks={tasks} removeTask={removeTask}></Overview>
+    </div>
+  );
 }
 
 export default App;

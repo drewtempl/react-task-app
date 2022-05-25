@@ -1,6 +1,6 @@
-import React, { Component } from "react";
+import React from "react";
 
-class Overview extends Component {
+/*class Overview extends Component {
     constructor(props) {
         super(props);
         this.delete = this.delete.bind(this);
@@ -21,6 +21,18 @@ class Overview extends Component {
             <ul>{taskList}</ul>      
         );
     }
+}*/
+
+function Overview(props) {
+    const taskList = props.tasks.map((task) => 
+            <li key={task.id}>
+                {task.text}
+                <button onClick={()=> props.removeTask(task.id)}>delete task</button>
+            </li>
+        );
+    return (
+        <ul>{taskList}</ul> 
+    )
 }
 
 export default Overview;

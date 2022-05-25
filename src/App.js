@@ -15,6 +15,8 @@ class App extends Component {
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.removeTask = this.removeTask.bind(this);
+
   }
 
   handleChange(event) {
@@ -40,6 +42,14 @@ class App extends Component {
     event.preventDefault();
   }
 
+  removeTask(taskID) {
+    //console.log(taskID)
+    const task = this.state.tasks.find(element => {
+      return element.id === taskID;
+    })
+    console.log(task);
+  }
+
   render() {
     return (
       <div>
@@ -55,7 +65,7 @@ class App extends Component {
           </label>
           <input type="submit" value="Submit"></input>
         </form>
-        <Overview tasks={this.state.tasks}></Overview>
+        <Overview tasks={this.state.tasks} removeTask={this.removeTask}></Overview>
       </div>
     );
   }
